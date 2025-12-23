@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Monitoramento de Parque de Impressoras</title>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>📊 Monitoramento do Parque de Impressoras</h1>
+        <p>Análise inteligente de suprimentos, risco e consumo</p>
+    </header>
+
+    <main class="container">
+
+        <!-- ===============================
+         UPLOAD DE ARQUIVOS
+    =============================== -->
+        <section class="card">
+            <h2>📂 Importação de CSV</h2>
+
+            <div class="upload-group">
+                <div>
+                    <label>Base inicial:</label>
+                    <input type="file" id="baseCSV" accept=".csv" onchange="carregarBase()">
+                </div>
+
+                <div>
+                    <label>CSV diário:</label>
+                    <input type="file" id="dailyCSV" accept=".csv" disabled>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button id="btnAdd" onclick="adicionarCSVDoDia()" disabled>➕ Adicionar CSV do Dia</button>
+                <button id="btnExport" onclick="exportarCSV()" disabled>📤 Exportar Histórico</button>
+            </div>
+        </section>
+
+        <!-- ===============================
+         FILTROS
+    =============================== -->
+        <section class="card">
+            <h2>🔍 Filtros e Ordenação</h2>
+
+            <div class="filters">
+
+                <div class="filter">
+                    <label>Série</label>
+                    <select id="filtroSerie" onchange="gerarAlertas()">
+                        <option value="ALL">Todas</option>
+                    </select>
+                </div>
+
+                <div class="filter">
+                    <label>Suprimento</label>
+                    <select id="filtroSuprimento" onchange="gerarAlertas()">
+                        <option value="ALL">Todos</option>
+                        <option value="Preto">Preto</option>
+                        <option value="Fotocondutor">Fotocondutor</option>
+                        <option value="Kit">Kit de manutenção</option>
+                        <option value="CMY">Ciano / Magenta / Amarelo</option>
+                    </select>
+                </div>
+
+                <div class="filter">
+                    <label>Status</label>
+                    <select id="filtroStatus" onchange="gerarAlertas()">
+                        <option value="ALL">Todos</option>
+                        <option value="OK">🟢 OK</option>
+                        <option value="WARN">🟡 Atenção</option>
+                        <option value="CRIT">🔴 Crítico</option>
+                    </select>
+                </div>
+
+                <div class="filter ordem">
+                    <label>Ordenação</label>
+                    <button class="btn-ordem" onclick="toggleOrdem()" title="Alternar ordem">
+                        ⇅
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ===============================
+         ALERTAS
+    =============================== -->
+        <section class="card">
+            <h2>🚨 Alertas de Suprimentos</h2>
+            <div id="alertas" class="alertas"></div>
+        </section>
+
+        <!-- ===============================
+         RANKING TEXTO
+    =============================== -->
+        <section class="card">
+            <h2>🏆 Ranking de Uso Diário</h2>
+            <div id="ranking"></div>
+        </section>
+
+        <!-- ===============================
+         GRÁFICOS
+    =============================== -->
+        <section class="grid-2">
+            <div class="card">
+                <h3>📈 Páginas por Impressora</h3>
+                <canvas id="chartPorImpressora"></canvas>
+            </div>
+
+            <div class="card">
+                <h3>🟢🟡🔴 Status Geral do Parque</h3>
+                <canvas id="graficoStatus"></canvas>
+            </div>
+
+
+        </section>
+
+        <div class="card">
+            <h3>📠 Digitalizações por Impressora</h3>
+            <div class="chart-wrapper">
+                <canvas id="graficoDigitalizacoes"></canvas>
+            </div>
+        </div>
+        <section class="card">
+            <h2>🧾 Relatório Gerencial do Período</h2>
+
+            <div class="relatorio-grid">
+
+                <div class="relatorio-box">
+                    <h4>🖨️ Maior Volume de Impressão</h4>
+                    <p id="relatorioImpressaoMaior">—</p>
+                    <h4>🖨️ Menor Volume de Impressão</h4>
+                    <p id="relatorioImpressaoMenor">—</p>
+                </div>
+
+                <div class="relatorio-box">
+                    <h4>📠 Maior Volume de Digitalização</h4>
+                    <p id="relatorioDigitalizacaoMaior">—</p>
+                    <h4>📠 Menor Volume de Digitalização</h4>
+                    <p id="relatorioDigitalizacaoMenor">—</p>
+                </div>
+
+                <div class="relatorio-box">
+                    <h4>⚠️ Saúde do Parque</h4>
+                    <p id="relatorioRisco">—</p>
+                </div>
+
+            </div>
+
+            <button class="btn-relatorio" onclick="exibirRelatorioPeriodo()">
+                📊 Gerar Relatório do Período
+            </button>
+            <button class="btn-relatorio" onclick="gerarRelatorioExecutivoPDF()">
+                📄 Gerar Relatório Executivo PDF
+            </button>
+        </section>
+        <section class="card">
+            <h2>📦 Histórico de Trocas de Suprimentos</h2>
+
+            <div id="listaTrocas" class="lista-trocas">
+                <p class="muted">Nenhuma troca identificada ainda.</p>
+            </div>
+        </section>
+        <!-- Container oculto para gerar PDF -->
+        <div id="relatorioContainer" style="
+    display:none;
+    font-family: Arial, sans-serif;
+    width: 700px;
+    padding: 20px;
+    background-color: #f4f6f8;  /* cor de fundo */
+    color: #333;
+">
+            <h1 style="color:#0a3d62; text-align:center;">📊 Relatório Executivo - Impressoras</h1>
+            <p style="text-align:center;">🗓️ Período: <span id="relPeriodoInicio"></span> → <span
+                    id="relPeriodoFim"></span></p>
+
+            <!-- Seções -->
+            <section style="margin-top:20px;">
+                <h2 style="color:#0984e3;">🖨️ Impressão</h2>
+                <p>🏆 Maior: <span id="relImpressaoMaior"></span></p>
+                <p>🔻 Menor: <span id="relImpressaoMenor"></span></p>
+            </section>
+
+            <section style="margin-top:20px;">
+                <h2 style="color:#00b894;">📠 Digitalização</h2>
+                <p>🏆 Maior: <span id="relDigitalizacaoMaior"></span></p>
+                <p>🔻 Menor: <span id="relDigitalizacaoMenor"></span></p>
+            </section>
+
+            <section
+                style="margin-top:20px; padding:10px; background:#fff3cd; border-left:5px solid #ffc107; border-radius:5px;">
+                <h2 style="color:#d63031;">⚠️ Saúde do Parque</h2>
+                <p>🟢 OK: <span id="relSaudeOk"></span></p>
+                <p>🟡 Atenção: <span id="relSaudeWarn"></span></p>
+                <p>🔴 Crítico: <span id="relSaudeCrit"></span></p>
+            </section>
+
+            <section style="margin-top:20px;">
+                <h2 style="color:#6c5ce7;">📦 Trocas de Suprimentos</h2>
+                <ul id="relTrocas"></ul>
+            </section>
+
+            <section style="margin-top:20px;">
+                <h2>🏆 Ranking de Impressoras</h2>
+                <ol id="relRanking"></ol>
+            </section>
+
+
+        </div>
+
+
+    </main>
+
+    <footer>
+        <p>© Monitoramento Inteligente de Impressoras</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="script.js"></script>
+
+</body>
+
+</html>
