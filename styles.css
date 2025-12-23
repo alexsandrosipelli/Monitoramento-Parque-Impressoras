@@ -1,0 +1,284 @@
+:root {
+    --bg: #020617;
+    --card: #020617f2;
+    --border: #1e293b;
+    --primary: #38bdf8;
+    --text: #e5e7eb;
+    --muted: #94a3b8;
+    --danger: #7f1d1d;
+    --warn: #78350f;
+    --ok: #14532d;
+}
+
+/* ===============================
+   BASE
+================================ */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: radial-gradient(circle at top, #0f172a, #020617 65%);
+    color: var(--text);
+}
+
+/* ===============================
+   HEADER / FOOTER
+================================ */
+header {
+    text-align: center;
+    padding: 32px 16px 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+header h1 {
+    margin: 0;
+    color: var(--primary);
+}
+
+header p {
+    color: var(--muted);
+    margin-top: 8px;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--muted);
+    font-size: 14px;
+    border-top: 1px solid var(--border);
+}
+
+/* ===============================
+   LAYOUT
+================================ */
+.container {
+    max-width: 1500px;
+    margin: auto;
+    padding: 24px;
+}
+
+section {
+    margin-bottom: 24px;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 20px;
+}
+
+/* ===============================
+   CARDS
+================================ */
+.card {
+    background: linear-gradient(180deg, #020617, #020617cc);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .4);
+}
+
+.card h2,
+.card h3 {
+    margin-top: 0;
+    color: var(--primary);
+}
+
+/* ===============================
+   INPUTS / BUTTONS
+================================ */
+input[type="file"],
+select {
+    width: 100%;
+    background: #020617;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px;
+    color: var(--text);
+}
+
+label {
+    display: block;
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 6px;
+}
+
+button {
+    background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+    color: #020617;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .15s ease, opacity .15s ease;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+/* ===============================
+   UPLOAD AREA
+================================ */
+.upload-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.btn-group {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* ===============================
+   FILTROS
+================================ */
+.filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    align-items: end;
+}
+
+.filter.ordem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.btn-ordem {
+    width: 100%;
+    background: #020617;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 20px;
+}
+
+/* ===============================
+   ALERTAS
+================================ */
+.alertas {
+    margin-top: 12px;
+}
+
+.alert {
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.alert-ok {
+    background: linear-gradient(135deg, #14532d, #052e16);
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #78350f, #451a03);
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #7f1d1d, #450a0a);
+}
+
+/* ===============================
+   RANKING TEXTO
+================================ */
+#ranking h3 {
+    margin-bottom: 6px;
+    color: var(--primary);
+}
+
+#ranking ul {
+    padding-left: 18px;
+    margin-top: 6px;
+}
+
+#ranking li {
+    margin-bottom: 4px;
+}
+
+/* ===============================
+   GRÁFICOS
+================================ */
+canvas {
+    background: #020617;
+    border-radius: 16px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    width: 100% !important;
+    height: auto !important;
+}
+
+.subtitulo {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 10px;
+}
+
+.chart-wrapper {
+    height: 320px;
+    /* 🔒 controla o tamanho */
+    position: relative;
+}
+
+.relatorio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.relatorio-box {
+    background: linear-gradient(180deg, #020617, #020617cc);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+}
+
+.relatorio-box h4 {
+    margin: 0 0 8px;
+    color: var(--primary);
+}
+
+.relatorio-box p {
+    font-size: 15px;
+    font-weight: 600;
+}.btn-relatorio {
+    margin-top: 10px;
+    width: 100%;
+    font-size: 16px;
+}
+.lista-trocas {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.troca-item {
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    background: linear-gradient(135deg, #0f172a, #020617);
+}
+
+.troca-item span {
+    color: var(--primary);
+}
+.muted {
+    color: var(--muted);
+    font-size: 14px;
+}
